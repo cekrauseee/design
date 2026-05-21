@@ -42,7 +42,7 @@ Help plan, execute, and synthesize user research studies.
 
 ## Local Tools
 
-When working locally in Claude Code:
+When working locally:
 - **Visual inspection**: Use browser tools to screenshot and inspect the design
 - **File system**: Read source code, stylesheets, and component files directly
 - **Console**: Check browser console for errors via the preview server log

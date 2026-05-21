@@ -1,19 +1,21 @@
 # design
 
-HTML-first design plugin for coding agents. 15 specialized skills,
+HTML-first design ecosystem for coding agents. 15 specialized skills,
 anti-slop discipline, hooks, a local preview server with hot reload,
 and reusable starters.
 
 Two install paths:
 
-- **`npx skills`** — installs the 15 skills into any supported agent
-  (Claude Code, Codex, Cursor, Cline, OpenCode, and ~50 others).
-  Works everywhere. No hooks, no preview server.
-- **Claude Code plugin marketplace** — installs the full plugin
-  including hooks and the auto-starting preview server. Claude Code
-  only.
+- **Skills only** (`npx skills`) — installs the 15 skills into any
+  supported coding agent (~50 of them). Universal. No hooks, no
+  preview server.
+- **Full plugin** — adds the hooks that auto-scaffold a project and
+  spawn the preview server when you type `/design <name>`. Works on
+  agents that support the [Claude Code plugin marketplace](https://code.claude.com/docs/en/plugin-marketplaces)
+  format (Claude Code today; spec-compatible agents as the ecosystem
+  grows).
 
-## Install — `npx skills` (any agent)
+## Install — skills only
 
 ```bash
 # All 15 skills, into every detected agent
@@ -23,9 +25,9 @@ npx skills add cekrauseee/design
 npx skills add cekrauseee/design --skill anti-slop --skill make-a-deck
 
 # Target a specific agent
-npx skills add cekrauseee/design -a claude-code
 npx skills add cekrauseee/design -a cursor
 npx skills add cekrauseee/design -a codex
+npx skills add cekrauseee/design -a opencode
 
 # Install globally instead of per-project
 npx skills add cekrauseee/design -g
@@ -34,20 +36,20 @@ npx skills add cekrauseee/design -g
 npx skills add cekrauseee/design --list
 ```
 
-Default install location is `./.claude/skills/` (project) or
-`~/.claude/skills/` (with `-g`). Each agent has its own canonical
-path — `npx skills` symlinks into all of them.
+Each agent has its own canonical path; `npx skills` symlinks into
+all of them. List of supported agents and paths:
+https://www.skills.sh/docs.
 
-## Install — Claude Code plugin (full experience)
+## Install — full plugin (hooks + preview server)
 
-In any project, inside Claude Code:
+In a project, with a hook-aware agent:
 
 ```
 /plugin marketplace add cekrauseee/design
 /plugin install design@cekrauseee-design
 ```
 
-Then activate in any directory:
+Then in any directory:
 
 ```
 /design my-site
@@ -91,7 +93,7 @@ Specs and handoff docs live in `docs/`.
 
 ```
 design/
-├── .claude-plugin/   plugin.json + marketplace.json
+├── .claude-plugin/   plugin manifest + marketplace entry
 ├── AGENTS.md         canonical agent instructions (read first)
 ├── CLAUDE.md         pointer to AGENTS.md
 ├── hooks/            SessionStart + UserPromptSubmit + statusline
@@ -108,10 +110,10 @@ design/
 | `DESIGN_STUDIO` | `${cwd}/design`  | Where projects live. Set for a global shared studio. |
 | `DESIGN_PORT`   | `3333`           | Preview server port.                                 |
 
-## Manual server start (non-Claude-Code agents)
+## Manual server start
 
-When installing via `npx skills`, the preview server isn't auto-run.
-To start it yourself:
+When installing via `npx skills` (or on any agent without hook
+support), the preview server isn't auto-run. Start it yourself:
 
 ```bash
 git clone https://github.com/cekrauseee/design
@@ -139,7 +141,7 @@ npx skills remove anti-slop
 npx skills remove
 ```
 
-Inside Claude Code (plugin route):
+Full plugin route (hook-aware agents):
 
 ```
 /plugin update design
