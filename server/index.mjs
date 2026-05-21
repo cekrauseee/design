@@ -602,10 +602,15 @@ function serveFile(filePath, res) {
     const ct = mime(filePath);
     if (ct.startsWith("text/html")) {
       let html = data.toString("utf-8");
-      const tag = `<script>\n${hmrClient}\n</script>`;
-      // Inject at the START of <head> so the console wrapper runs before
-      // any other script (notably @babel/standalone, which logs an
-      // in-browser warning during its own init).
+      // The reset kills the default 8px <body> margin so designs paint
+      // edge-to-edge inside the preview iframe (no cream/white frame
+      // around a full-bleed canvas). Harmless for pages that style their
+      // own body since author rules with the same specificity win.
+      const reset = '<style>html,body{margin:0;padding:0}</style>';
+      const tag = reset + `\n<script>\n${hmrClient}\n</script>`;
+      // Inject at the START of <head> so the reset and the console wrapper
+      // both apply before any other script (notably @babel/standalone,
+      // which logs an in-browser warning during its own init).
       if (/<head\b[^>]*>/i.test(html)) {
         html = html.replace(/<head\b[^>]*>/i, m => m + "\n" + tag);
       } else if (html.includes("</body>")) {
