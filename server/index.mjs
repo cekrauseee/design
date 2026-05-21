@@ -102,7 +102,9 @@ const LANDING_HTML = `<!doctype html>
   --ink: #1a1814; --ink-2: #3c3830; --ink-3: #7a7268; --ink-4: #a39a8e;
   --line: rgba(26,24,21,0.08); --line-m: rgba(26,24,21,0.14);
   --accent: #b2562b; --accent-soft: rgba(178,86,43,0.10);
-  --iframe-bg: white;
+  /* iframe-bg matches the shell so the stage does not draw a white frame
+     around designs that do not paint to their viewport edges. */
+  --iframe-bg: var(--bg);
   --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
   --mono: ui-monospace, "SF Mono", Menlo, monospace;
   --sidebar-w: 280px;
@@ -112,7 +114,7 @@ const LANDING_HTML = `<!doctype html>
   --ink: #f3eee6; --ink-2: #d5cdbe; --ink-3: #8a8278; --ink-4: #5c554b;
   --line: rgba(243,238,230,0.06); --line-m: rgba(243,238,230,0.10);
   --accent: #d97a4a; --accent-soft: rgba(217,122,74,0.14);
-  --iframe-bg: #1c1814;
+  /* iframe-bg inherits :root's var(--bg) so it tracks the shell. */
 }
 html, body { height: 100%; }
 body { font-family: var(--sans); background: var(--bg); color: var(--ink); display: flex;
@@ -735,6 +737,14 @@ p{font-family:ui-monospace,monospace;font-size:12px;color:#8a8278}
 
   fs.stat(filePath, (err, stat) => {
     if (err) {
+      // Sidecar state files (e.g. .design-canvas.state.json) are expected to
+      // be absent before the user makes their first change. Return an empty
+      // JSON doc so the browser doesn't log a 404 in the network panel.
+      if (/\.state\.json$/i.test(pathname)) {
+        res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
+        res.end("{}");
+        return;
+      }
       res.writeHead(404);
       res.end("Not found");
       return;
