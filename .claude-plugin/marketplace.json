@@ -1,0 +1,35 @@
+{
+  "name": "design",
+  "owner": {
+    "name": "cekrauseee",
+    "url": "https://github.com/cekrauseee"
+  },
+  "metadata": {
+    "description": "Design ecosystem for coding agents. HTML-based design with live preview, anti-slop discipline, specialized skills, and a design-to-code bridge.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "design",
+      "source": ".",
+      "description": "Full design plugin: 15 skills + hooks + preview server + starters + rules.",
+      "skills": [
+        "./skills/accessibility-review",
+        "./skills/animated-video",
+        "./skills/anti-slop",
+        "./skills/design-critique",
+        "./skills/design-handoff",
+        "./skills/design-system",
+        "./skills/interactive-prototype",
+        "./skills/make-a-deck",
+        "./skills/make-tweakable",
+        "./skills/research-synthesis",
+        "./skills/save-as-pdf",
+        "./skills/save-as-standalone-html",
+        "./skills/user-research",
+        "./skills/ux-copy",
+        "./skills/wireframe"
+      ]
+    }
+  ]
+}

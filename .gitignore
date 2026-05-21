@@ -1,0 +1,16 @@
+# Local design work — never publish user projects
+projects/
+design/
+
+# Server runtime
+server/node_modules/
+server/console.log
+.design-server.out
+.design-server-*.pid
+
+# Editors / OS
+.DS_Store
+*.swp
+.vscode/
+.idea/
+node_modules/

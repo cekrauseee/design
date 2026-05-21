@@ -1,0 +1,33 @@
+{
+  "name": "design",
+  "description": "Design ecosystem for coding agents. HTML-based design with live preview, anti-slop discipline, specialized skills, and a design-to-code bridge.",
+  "author": {
+    "name": "cekrause"
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/design-activate.js",
+            "timeout": 5,
+            "statusMessage": "Loading design mode..."
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/design-mode-tracker.js",
+            "timeout": 5,
+            "statusMessage": "Tracking design mode..."
+          }
+        ]
+      }
+    ]
+  }
+}
