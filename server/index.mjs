@@ -601,7 +601,12 @@ function serveFile(filePath, res) {
     if (ct.startsWith("text/html")) {
       let html = data.toString("utf-8");
       const tag = `<script>\n${hmrClient}\n</script>`;
-      if (html.includes("</body>")) {
+      // Inject at the START of <head> so the console wrapper runs before
+      // any other script (notably @babel/standalone, which logs an
+      // in-browser warning during its own init).
+      if (/<head\b[^>]*>/i.test(html)) {
+        html = html.replace(/<head\b[^>]*>/i, m => m + "\n" + tag);
+      } else if (html.includes("</body>")) {
         html = html.replace("</body>", tag + "\n</body>");
       } else {
         html += "\n" + tag;

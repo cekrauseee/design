@@ -31,6 +31,10 @@ if (typeof document !== 'undefined' && !document.getElementById('dc-styles')) {
   const s = document.createElement('style');
   s.id = 'dc-styles';
   s.textContent = [
+    // Kill the default <body> margin and paint the host page in the canvas
+    // colour, so there's no white frame between the iframe edge and the
+    // canvas viewport when a page uses <DesignCanvas> as its only root.
+    `html,body{margin:0;padding:0;background:${DC.bg}}`,
     '.dc-editable{cursor:text;outline:none;white-space:nowrap;border-radius:3px;padding:0 2px;margin:0 -2px}',
     '.dc-editable:focus{background:#fff;box-shadow:0 0 0 1.5px #c96442}',
     '[data-dc-slot]{transition:transform .18s cubic-bezier(.2,.7,.3,1)}',

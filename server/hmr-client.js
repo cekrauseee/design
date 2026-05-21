@@ -39,6 +39,21 @@
     post({ type: "rejection", reason: String(e.reason), ts: Date.now() });
   });
 
+  // Warnings we drop entirely (noisy and not actionable in a prototype):
+  //   - Babel standalone's "you are using the in-browser transformer" notice
+  var SILENCE = [
+    /in-browser Babel transformer.*precompile/i,
+  ];
+  function silenced(args) {
+    if (!args.length) return false;
+    var first = args[0];
+    if (typeof first !== "string") return false;
+    for (var i = 0; i < SILENCE.length; i++) {
+      if (SILENCE[i].test(first)) return true;
+    }
+    return false;
+  }
+
   var origLog = console.log;
   var origWarn = console.warn;
   var origError = console.error;
@@ -48,6 +63,7 @@
     post({ type: "log", args: Array.from(arguments).map(String), ts: Date.now() });
   };
   console.warn = function () {
+    if (silenced(arguments)) return;
     origWarn.apply(console, arguments);
     post({ type: "warn", args: Array.from(arguments).map(String), ts: Date.now() });
   };
